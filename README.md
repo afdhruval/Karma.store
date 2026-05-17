@@ -1,6 +1,6 @@
 # 🕴️ Karma - Developer Handbook & Technical Deep Dive
 
-![Karma Banner](https://ik.imagekit.io/onf7ynga4s/Screenshot%202026-05-12%20181647.png)
+![Karma Banner](https://ik.imagekit.io/onf7ynga4s/Screenshot%202026-05-17%20140422.png)
 
 Welcome to the ultimate technical guide for **Karma** (formerly Snitch), a premium full-stack fashion e-commerce marketplace. 
 

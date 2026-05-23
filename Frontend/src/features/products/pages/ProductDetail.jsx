@@ -329,7 +329,14 @@ const ProductDetail = () => {
                             </button>
                             <button
                                 id="buy-now-btn"
-                                onClick={() => alert("Buy Now — coming soon!")}
+                                onClick={async () => {
+                                    let variantToAdd = activeVariant;
+                                    if (!variantToAdd && product?.variants?.length > 0) {
+                                        variantToAdd = product.variants[0];
+                                    }
+                                    await handleAddItem({ productId: product._id, variantId: variantToAdd?._id });
+                                    navigate('/cart');
+                                }}
                                 className="w-full py-4 text-[11px] font-black uppercase tracking-[0.2em] border-2 border-black bg-white text-black hover:bg-black hover:text-white transition-colors duration-300"
                             >
                                 Buy Now

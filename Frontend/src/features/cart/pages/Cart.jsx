@@ -2,12 +2,16 @@ import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useCart } from '../hook/useCart'
 import { Link, useNavigate } from 'react-router'
+import { useRazorpay } from "react-razorpay";
+import { useState } from 'react';
 
 const Cart = () => {
     const cart = useSelector(state => state.cart)
-    const { handleGetCart, handleIncrementCartItem, handleDecrementCartItem, handleRemoveCartItem } = useCart()
+    const { handleGetCart, handleIncrementCartItem, handleDecrementCartItem, handleRemoveCartItem, handleCreateCartOrder , verifyOrder } = useCart()
     const navigate = useNavigate()
-    const user = useSelector(state => state.auth.user)
+    const user = useSelector(state => state.user)
+
+    const { error, isLoading, Razorpay } = useRazorpay();
 
     useEffect(() => {
         handleGetCart()
@@ -25,8 +29,49 @@ const Cart = () => {
         return acc + price * (item.quantity || 1)
     }, 0)
 
-    const handleCheckout = () => {
-        navigate(`/order-success?order_id=SN-${Math.floor(Math.random() * 100000)}`, { state: { items, subtotal } })
+    // const handleCheckout = () => {
+    //     navigate(`/order-success?order_id=SN-${Math.floor(Math.random() * 100000)}`, { state: { items, subtotal } })
+    // }
+
+    async function handleCheckOut() {
+        const order = await handleCreateCartOrder();
+        
+        if (!order) {
+            alert("Failed to create order. Please try again.");
+            return;
+        }
+
+        const options = {
+            key: "rzp_test_SsolAMqyWnHY5f",
+            amount: order.amount, // Amount in paise
+            currency: order.currency,
+            name: "KARMA",
+            description: "Test Transaction",
+            order_id: order.id, // Generate order_id on server
+            handler: async (response) => {
+                const isValid = await verifyOrder({
+                    razorpayOrderId: response.razorpay_order_id,
+                    razorpayPaymentId: response.razorpay_payment_id,
+                    razorpaySignature: response.razorpay_signature,
+                });
+                if (isValid) {
+                    navigate(`/order-success?order_id=${response.razorpay_order_id}`, { state: { items, subtotal } });
+                } else {
+                    alert("Payment verification failed. Please contact support.");
+                }
+            },
+            prefill: {
+                name: user?.fullname,
+                email: user?.email,
+                contact: user?.contact,
+            },
+            theme: {
+                color: "#F37254",
+            },
+        };
+
+        const razorpayInstance = new Razorpay(options);
+        razorpayInstance.open();
     }
 
     /* ── Empty State ── */
@@ -203,7 +248,7 @@ const Cart = () => {
 
                             <button
                                 id="checkout-btn"
-                                onClick={handleCheckout}
+                                onClick={handleCheckOut}
                                 className="mt-6 w-full bg-black text-white text-xs font-bold uppercase tracking-[0.2em] py-4 hover:bg-[#e63946] transition-colors duration-200"
                             >
                                 Place Order

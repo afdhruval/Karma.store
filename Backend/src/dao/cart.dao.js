@@ -55,7 +55,7 @@ export async function getCartDetails(userId) {
                 items: { $push: '$items' }
             }
         }
-    ]))[ 0 ]
+    ]))[0]
 
     return cart
 }

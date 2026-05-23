@@ -9,6 +9,14 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20"
 import { config } from "./config/config.js";
 
+import path from "path";
+import { fileURLToPath } from "url";
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 const app = express();
 
 app.use(morgan("dev"));
@@ -16,11 +24,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
-    origin: "http://localhost:5173",
-    methods: [ "GET", "POST", "PUT", "DELETE" ],
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }))
-
 
 app.use(passport.initialize());
 
@@ -32,11 +39,15 @@ passport.use(new GoogleStrategy({
     return done(null, profile);
 }))
 
-app.get("/", (_req, res) => {
-    res.status(200).json({ message: "Server is running" });
-});
+
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
 app.use("/api/cart", cartRouter);
+
+app.use(express.static(path.join(__dirname, "../public")));
+
+app.get("/*splat", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/index.html"));
+});
 export default app;

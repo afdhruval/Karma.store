@@ -264,7 +264,10 @@ export const createOrder = async (req, res) => {
 
         return res.status(200).json({
             message: "order created successfully",
-            order,
+            order: {
+                ...order,
+                key: config.RAZORPAY_KEY_ID
+            },
             success: true
         });
     } catch (error) {

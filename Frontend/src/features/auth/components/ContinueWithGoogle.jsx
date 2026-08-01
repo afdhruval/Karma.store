@@ -2,7 +2,7 @@ import React from 'react'
 
 const ContinueWithGoogle = () => {
     return (
-        <a href="/api/auth/google"
+        <a href={`${import.meta.env.VITE_API_URL || ''}/api/auth/google`}
             className="flex items-center justify-center w-full bg-transparent border-2 border-black px-4 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-black hover:bg-black hover:text-white transition-all duration-300 focus:outline-none"
             style={{ fontFamily: "'Inter', sans-serif" }}
         >

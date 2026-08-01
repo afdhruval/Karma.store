@@ -13,6 +13,7 @@ const CreateProduct = () => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
+        category: 'unisex',
         priceAmount: '',
         priceCurrency: 'INR',
     });
@@ -66,6 +67,7 @@ const CreateProduct = () => {
             data.append('description', formData.description);
             data.append('priceAmount', formData.priceAmount);
             data.append('priceCurrency', formData.priceCurrency);
+            data.append('category', formData.category);
             images.forEach(img => data.append('images', img.file));
             await handleCreateProduct(data);
             navigate('/seller/dashboard');
@@ -185,11 +187,11 @@ const CreateProduct = () => {
                                 {/* Price Grid */}
                                 <div className="flex flex-col gap-1.5">
                                     <label className="text-[9px] font-bold uppercase tracking-[0.15em] text-black">
-                                        Pricing
+                                        Pricing & Category
                                     </label>
                                     <div className="flex gap-4">
                                         {/* Amount */}
-                                        <div className="flex-[3] flex flex-col gap-1">
+                                        <div className="flex-[2] flex flex-col gap-1">
                                             <span className="text-[8px] font-bold uppercase tracking-wider text-black/45">Amount (INR)</span>
                                             <input
                                                 id="cp-priceAmount"
@@ -205,7 +207,7 @@ const CreateProduct = () => {
                                             />
                                         </div>
                                         {/* Currency */}
-                                        <div className="flex-[1.5] flex flex-col gap-1">
+                                        <div className="flex-[1] flex flex-col gap-1">
                                             <span className="text-[8px] font-bold uppercase tracking-wider text-black/45">Currency</span>
                                             <select
                                                 id="cp-priceCurrency"
@@ -217,6 +219,21 @@ const CreateProduct = () => {
                                                 {CURRENCIES.map(c => (
                                                     <option key={c} value={c} style={{ backgroundColor: '#ffffff', color: '#000000' }}>{c}</option>
                                                 ))}
+                                            </select>
+                                        </div>
+                                        {/* Category */}
+                                        <div className="flex-[1] flex flex-col gap-1">
+                                            <span className="text-[8px] font-bold uppercase tracking-wider text-black/45">Category</span>
+                                            <select
+                                                id="cp-category"
+                                                name="category"
+                                                value={formData.category}
+                                                onChange={handleChange}
+                                                className="w-full bg-transparent border border-black/15 px-3.5 py-2.5 text-xs font-semibold text-black outline-none cursor-pointer appearance-none transition-all duration-300 focus:border-black"
+                                            >
+                                                <option value="unisex" style={{ backgroundColor: '#ffffff', color: '#000000' }}>Unisex</option>
+                                                <option value="men" style={{ backgroundColor: '#ffffff', color: '#000000' }}>Men</option>
+                                                <option value="women" style={{ backgroundColor: '#ffffff', color: '#000000' }}>Women</option>
                                             </select>
                                         </div>
                                     </div>

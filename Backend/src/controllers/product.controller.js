@@ -4,7 +4,7 @@ import { uploadFile } from "../services/storage.service.js";
 
 export async function createProduct(req, res) {
     try {
-        const { title, description, priceAmount, priceCurrency } = req.body;
+        const { title, description, priceAmount, priceCurrency, category } = req.body;
         const seller = req.user;
 
         let images = [];
@@ -21,6 +21,7 @@ export async function createProduct(req, res) {
         const product = await productModel.create({
             title,
             description,
+            category,
             price: {
                 amount: Number(priceAmount) || 0,
                 currency: priceCurrency || "INR"

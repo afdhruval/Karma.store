@@ -24,9 +24,8 @@ const Home = () => {
 
     // Client-side filter
     const filtered = products ? products.filter(p => {
-        if (!p.images?.[0]?.url) return false;
         if (activeFilter === 'all' || activeFilter === 'new') return true;
-        return p.category === activeFilter;
+        return p.category === activeFilter || p.category === 'unisex';
     }) : [];
 
     const handleTab = (tab) => {

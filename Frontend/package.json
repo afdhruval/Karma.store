@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^2.11.2",
     "@tailwindcss/vite": "^4.2.2",
     "axios": "^1.15.0",
+    "dotenv": "^17.4.2",
     "framer-motion": "^12.38.0",
     "locomotive-scroll": "^5.0.1",
     "react": "^19.2.4",
